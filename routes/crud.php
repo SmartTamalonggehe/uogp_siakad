@@ -13,7 +13,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['myThorottle', 'auth:api'])->group(function () {
+Route::middleware(['myThorottle', 'auth:api', "role:admin,fakultas"])->group(function () {
     Route::resources([
         'prodi' => App\Http\Controllers\CRUD\ProdiController::class,
         'ruangan' => App\Http\Controllers\CRUD\RuanganController::class,

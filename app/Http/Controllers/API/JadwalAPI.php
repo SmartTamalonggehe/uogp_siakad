@@ -19,12 +19,12 @@ class JadwalAPI extends Controller
         $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi.fakultas'])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
-                    ->orWhereHas('matkul', function ($mhs) use ($search) {
-                        $mhs->where('nm_mhs', 'like', "%$search%")
+                    ->orWhereHas('matkul', function ($matkul) use ($search) {
+                        $matkul->where('nm_matkul', 'like', "%$search%")
                             ->orWhere('singkat', 'like', "%$search%");
                     })
-                    ->orWhereHas('dosen', function ($mhs) use ($search) {
-                        $mhs->where('nm_dosen', 'like', "%$search%");
+                    ->orWhereHas('dosen', function ($dosen) use ($search) {
+                        $dosen->where('nm_dosen', 'like', "%$search%");
                     });
             })
             ->where([
@@ -137,24 +137,18 @@ class JadwalAPI extends Controller
         $tahun = $request->tahun;
         $search = $request->search;
         $prodi_id = $request->prodi_id;
-        $ruangan_id = $request->ruangan_id;
         $fakultas_id = $request->fakultas_id;
-        // convert ruangan_id to array
-        $ruangan_array = array_map('intval', explode(',', $ruangan_id));
 
         $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi.fakultas'])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
-                    ->orWhereHas('matkul', function ($mhs) use ($search) {
-                        $mhs->where('nm_matkul', 'like', "%$search%")
+                    ->orWhereHas('matkul', function ($matkul) use ($search) {
+                        $matkul->where('nm_matkul', 'like', "%$search%")
                             ->orWhere('singkat', 'like', "%$search%");
                     })
-                    ->orWhereHas('dosen', function ($mhs) use ($search) {
-                        $mhs->where('nm_dosen', 'like', "%$search%");
+                    ->orWhereHas('dosen', function ($dosen) use ($search) {
+                        $dosen->where('nm_dosen', 'like', "%$search%");
                     });
-            })
-            ->when($ruangan_id, function ($query) use ($ruangan_array) {
-                return $query->whereIn('ruangan_id', $ruangan_array);
             })
             ->when($fakultas_id, function ($query) use ($fakultas_id) {
                 return $query->whereHas('prodi', function ($query) use ($fakultas_id) {
@@ -162,9 +156,7 @@ class JadwalAPI extends Controller
                 });
             })
             ->when($prodi_id, function ($query) use ($prodi_id) {
-                return $query->whereHas('prodi', function ($query) use ($prodi_id) {
-                    $query->where('prodi_id', 'like', $prodi_id);
-                });
+                $query->where('prodi_id', $prodi_id);
             })
             ->where([
                 ['semester',  $semester],

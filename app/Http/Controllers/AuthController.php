@@ -59,9 +59,10 @@ class AuthController extends Controller
     function cekToken(Request $request)
     {
         $user = $request->user();
+        // dd($user);
         return response()->json([
             'status' => true,
-            'role' => $user->role
+            'role' => $user['role'],
         ]);
     }
 

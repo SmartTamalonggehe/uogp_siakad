@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@feuogp.ac.id',
             'password' => Hash::make('12345678'),
             'show_password' => '',
-            'role' => 'FE'
+            'role' => 'fakultas'
         ]);
         User::create([
             'id' => 2, // fakultas_id
@@ -36,7 +36,31 @@ class UserSeeder extends Seeder
             'email' => 'admin@fstuogp.com',
             'password' => Hash::make('12345678'),
             'show_password' => '',
-            'role' => 'FST'
+            'role' => 'fakultas'
+        ]);
+        User::create([
+            'id' => 31, // prodi_id
+            'name' => 'Manajemen',
+            'email' => 'manajemen@feuogp.ac.id',
+            'password' => Hash::make('12345678'),
+            'show_password' => '',
+            'role' => 'prodi'
+        ]);
+        User::create([
+            'id' => 32, // prodi_id
+            'name' => 'Ekonomi Pembangunan',
+            'email' => 'ekbang@feuogp.ac.id',
+            'password' => Hash::make('12345678'),
+            'show_password' => '',
+            'role' => 'prodi'
+        ]);
+        User::create([
+            'id' => 33, // prodi_id
+            'name' => 'Akuntansi',
+            'email' => 'akuntansi@feuogp.ac.id',
+            'password' => Hash::make('12345678'),
+            'show_password' => '',
+            'role' => 'prodi'
         ]);
     }
 }
