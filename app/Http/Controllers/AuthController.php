@@ -59,16 +59,16 @@ class AuthController extends Controller
     function cekToken(Request $request)
     {
         $user = $request->user();
-        // dd($user);
         return response()->json([
             'status' => true,
-            'role' => $user['role'],
+            'role' => $user->role,
         ]);
     }
 
     function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        $token = $request->user()->token(); // Akses token terlebih dahulu
+        $token->revoke(); // Cabut tokennya
         return response()->json([
             'status' => true,
             'message' => 'Logout Berhasil',

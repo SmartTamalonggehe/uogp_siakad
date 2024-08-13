@@ -51,13 +51,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(Dosen::class);
     }
-
-    public function withAccessToken($token)
-    {
-        $additionalClaims = [
-            'role' => $this->role,
-        ];
-
-        return array_merge($token->toArray(), $additionalClaims);
-    }
 }

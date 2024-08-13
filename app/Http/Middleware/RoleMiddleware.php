@@ -18,7 +18,7 @@ class RoleMiddleware
     {
         $user = Auth::guard('api')->user();
 
-        if (is_array($user) && isset($user['role']) && in_array($user['role'], $roles)) {
+        if ($user && in_array($user->role, $roles)) {
             return $next($request);
         }
 
