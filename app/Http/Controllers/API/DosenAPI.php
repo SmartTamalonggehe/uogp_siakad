@@ -19,6 +19,12 @@ class DosenAPI extends Controller
         return new CrudResource('success', 'Data Dosen', $data);
     }
 
+    function show($id)
+    {
+        $data = Dosen::findOrFail($id);
+        return new CrudResource('success', 'Data Dosen', $data);
+    }
+
     function all(Request $request)
     {
         $search = $request->search;

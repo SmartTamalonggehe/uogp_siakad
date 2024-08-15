@@ -95,17 +95,19 @@ class DosenController extends Controller
             $password = $this->makeAccount->password();
             // membuat email
             $email = $this->makeAccount->email($data_req['nm_dosen']);
-
+            // make id user time
+            $data_req['id'] = time();
+            $data_req["user_id"] = $data_req['id'];
             // input data user
             $user = User::create([
+                'id' => $data_req['id'],
                 'name' => $data_req['nm_dosen'],
                 'email' => $email,
                 'password' => Hash::make($password),
                 'show_password' => $password,
                 'role' => 'dosen',
             ]);
-            // add user id to data
-            $data_req['user_id'] = $user->id;
+
             Dosen::create($data_req);
             $data = Dosen::with(['user'])
                 ->latest()->first();

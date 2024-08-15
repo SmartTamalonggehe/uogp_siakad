@@ -138,6 +138,7 @@ class JadwalAPI extends Controller
         $search = $request->search;
         $prodi_id = $request->prodi_id;
         $fakultas_id = $request->fakultas_id;
+        $dosen_id = $request->dosen_id;
 
         $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi.fakultas'])
             ->where(function ($query) use ($search) {
@@ -157,6 +158,9 @@ class JadwalAPI extends Controller
             })
             ->when($prodi_id, function ($query) use ($prodi_id) {
                 $query->where('prodi_id', $prodi_id);
+            })
+            ->when($dosen_id, function ($query) use ($dosen_id) {
+                $query->where('dosen_id', $dosen_id);
             })
             ->where([
                 ['semester',  $semester],

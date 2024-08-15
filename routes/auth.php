@@ -19,4 +19,5 @@ Route::post('login', [AuthController::class, 'login']);
 Route::middleware(['auth:api'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('cek_token', [AuthController::class, 'cekToken']);
+    Route::post('update/{id}', [AuthController::class, 'update']);
 });

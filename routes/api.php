@@ -34,6 +34,7 @@ Route::middleware(['myThorottle'])->group(function () {
     Route::prefix('dosen')->group(function () {
         Route::get('/', [App\Http\Controllers\API\DosenAPI::class, 'index']);
         Route::get('all', [App\Http\Controllers\API\DosenAPI::class, 'all']);
+        Route::get('{id}', [App\Http\Controllers\API\DosenAPI::class, 'show']);
     });
     // matkul
     Route::prefix('matkul')->group(function () {

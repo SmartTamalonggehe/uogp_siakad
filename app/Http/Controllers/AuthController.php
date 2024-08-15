@@ -4,11 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Resources\CrudResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    protected function spartaValidation($request, $id = "")
+    {
+        $required = "";
+        if ($id == "") {
+            $required = "required";
+        }
+        $rules = [
+            'email' => 'required|unique:users,email,' . $id,
+        ];
+
+        $messages = [
+            'email.required' => 'Email harus diisi.',
+            'email.unique' => 'Email sudah terdaftar.',
+        ];
+        $validator = Validator::make($request, $rules, $messages);
+
+        if ($validator->fails()) {
+            $message = [
+                'judul' => 'Gagal',
+                'type' => 'error',
+                'message' => $validator->errors()->first(),
+            ];
+            return response()->json($message, 400);
+        }
+    }
+
     function login(Request $request)
     {
         $validator = Validator::make(
@@ -39,7 +66,7 @@ class AuthController extends Controller
             ], 401);
         }
         // mengambil email
-        $user = User::where('email', $request['email'])->firstOrFail();
+        $user = User::where('email', $request['email'])->with('dosen')->firstOrFail();
         // membuat token
         $token = $user->createToken('authToken')->accessToken;
 
@@ -51,7 +78,8 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'role' => $user->role
+                'role' => $user->role,
+                'dosen' => $user->dosen
             ]
         ]);
     }
@@ -62,6 +90,10 @@ class AuthController extends Controller
         return response()->json([
             'status' => true,
             'role' => $user->role,
+            'user' => [
+                'id' => $user->id,
+                'email' => $user->email,
+            ]
         ]);
     }
 
@@ -73,5 +105,22 @@ class AuthController extends Controller
             'status' => true,
             'message' => 'Logout Berhasil',
         ]);
+    }
+
+    function update($id, Request $request)
+    {
+        $data_req = $request->all();
+        // return $data_req;
+        $validate = $this->spartaValidation($data_req, $id);
+        if ($validate) {
+            return $validate;
+        }
+        $user = User::find($id);
+        $user->update([
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'show_password' => $request->password,
+        ]);
+        return new CrudResource('success', 'Data Berhasil Diubah', $user);
     }
 }
