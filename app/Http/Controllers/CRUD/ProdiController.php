@@ -6,6 +6,7 @@ use App\Models\Prodi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CrudResource;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class ProdiController extends Controller

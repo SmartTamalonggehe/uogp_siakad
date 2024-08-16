@@ -72,10 +72,12 @@ class JadwalController extends Controller
                     $prodi->where('fakultas_id', $fakultas_id);
                 });
             })
+            ->when($prodi_id, function ($query) use ($prodi_id) {
+                $query->where('prodi_id', $prodi_id);
+            })
             ->where([
                 ['semester', $semester],
                 ['tahun', $tahun],
-                ['prodi_id', "like", "%$prodi_id%"],
             ])
             ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")
             ->orderBy('mulai')

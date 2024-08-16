@@ -57,7 +57,9 @@ class MatkulController extends Controller
             ->when($sortby, function ($query) use ($sortby, $order) {
                 $query->orderBy($sortby, $order ?? 'asc');
             })
-            ->where('prodi_id', 'like', "%$prodi_id%")
+            ->when($prodi_id, function ($query) use ($prodi_id) {
+                $query->where('prodi_id', $prodi_id);
+            })
             ->paginate(10);
         return new CrudResource('success', 'Data Matkul', $data);
     }
