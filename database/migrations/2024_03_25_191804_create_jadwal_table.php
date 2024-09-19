@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jadwal', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignId('prodi_id')->constrained('prodi')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('matkul_id')->constrained('matkul')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('dosen_id')->constrained('dosen')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('ruangan_id')->constrained('ruangan')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('matkul_id')->constrained('matkul')->cascadeOnDelete();
+            $table->foreignUuid('dosen_id')->constrained('dosen')->cascadeOnDelete();
+            $table->foreignUuid('ruangan_id')->constrained('ruangan')->cascadeOnDelete();
             $table->string('hari', 8);
             $table->time('mulai');
             $table->time('seles');

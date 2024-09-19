@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('matkul', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignId('prodi_id')->constrained('prodi')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('kd_matkul', 10)->unique();
             $table->string('nm_matkul', 150);

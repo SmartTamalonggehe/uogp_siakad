@@ -4,6 +4,7 @@ namespace App\Http\Controllers\CRUD;
 
 use App\Models\User;
 use App\Models\Dosen;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -95,8 +96,8 @@ class DosenController extends Controller
             $password = $this->makeAccount->password();
             // membuat email
             $email = $this->makeAccount->email($data_req['nm_dosen']);
-            // make id user time
-            $data_req['id'] = time();
+            // make id user uuid
+            $data_req['id'] = Str::uuid();
             $data_req["user_id"] = $data_req['id'];
             // input data user
             $user = User::create([

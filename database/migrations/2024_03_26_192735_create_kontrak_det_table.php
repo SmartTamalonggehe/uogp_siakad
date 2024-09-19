@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('kontrak_det', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kontrak_id')->constrained('kontrak')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('jadwal_id')->constrained('jadwal')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('mhs_id')->constrained('mhs')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('kontrak_id')->constrained('kontrak')->cascadeOnDelete();
+            $table->foreignUuid('jadwal_id')->constrained('jadwal')->cascadeOnDelete();
+            $table->foreignUuid('mhs_id')->constrained('mhs')->cascadeOnDelete();
             $table->timestamps();
         });
     }
