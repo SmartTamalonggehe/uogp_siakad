@@ -17,15 +17,15 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 999,
             'name' => 'Admin',
-            'email' => 'admin@mail.com',
-            'password' => Hash::make('12345678'),
+            'email' => 'smartspartacus@fstuogp.com',
+            'password' => Hash::make('smartspartacus'),
             'show_password' => '',
             'role' => 'admin'
         ]);
         User::create([
             'id' => 1, // fakultas_id
             'name' => 'FE',
-            'email' => 'admin@feuogp.ac.id',
+            'email' => 'fakultas@febuogp.com',
             'password' => Hash::make('12345678'),
             'show_password' => '',
             'role' => 'fakultas'
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 31, // prodi_id
             'name' => 'Manajemen',
-            'email' => 'manajemen@feuogp.ac.id',
+            'email' => 'manajemen@febuogp.com',
             'password' => Hash::make('12345678'),
             'show_password' => '',
             'role' => 'prodi'
@@ -49,7 +49,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 32, // prodi_id
             'name' => 'Ekonomi Pembangunan',
-            'email' => 'ekbang@feuogp.ac.id',
+            'email' => 'ekbang@febuogp.com',
             'password' => Hash::make('12345678'),
             'show_password' => '',
             'role' => 'prodi'
@@ -57,7 +57,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 33, // prodi_id
             'name' => 'Akuntansi',
-            'email' => 'akuntansi@feuogp.ac.id',
+            'email' => 'akuntansi@febuogp.com',
             'password' => Hash::make('12345678'),
             'show_password' => '',
             'role' => 'prodi'
@@ -66,7 +66,7 @@ class UserSeeder extends Seeder
         User::create([
             'id' => 34, // prodi_id
             'name' => 'Master Manajemen',
-            'email' => 'mm@feuogp.ac.id',
+            'email' => 'mm@febuogp.com',
             'password' => Hash::make('12345678'),
             'show_password' => '',
             'role' => 'prodi'
