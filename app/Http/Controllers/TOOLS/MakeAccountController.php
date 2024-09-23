@@ -23,12 +23,22 @@ class MakeAccountController extends Controller
 
     public function email($email)
     {
+        // Daftar gelar yang ingin dihapus
+        $gelar_pattern = '/^(Dra\.|Drs\.|Prof\.|Dr\.|Ir\.|M\.|S\.)\s*/i';
+
+        // Menghapus gelar jika ditemukan di awal string
+        $email_without_gelar = preg_replace($gelar_pattern, '', $email);
+
         // Membagi string berdasarkan tanda koma atau titik
-        $array_teks = preg_split('/[,.]/', $email, -1, PREG_SPLIT_NO_EMPTY);
+        $array_teks = preg_split('/[,.]/', $email_without_gelar, -1, PREG_SPLIT_NO_EMPTY);
         // Mengambil elemen pertama dari array hasilnya
         $remove_koma = reset($array_teks);
-        $slug = Str::slug($remove_koma, '_'); // Membuat slug dari nm_petugas (misalnya: john-doe)
-        $new_email = Str::finish($slug, '@mail.com'); // Menambahkan "@mail.com" di belakang slug
+
+        // Membuat slug dari teks tanpa koma
+        $slug = Str::slug($remove_koma, '_');
+
+        // Menambahkan domain email di belakang slug
+        $new_email = Str::finish($slug, '@febuogp.com');
 
         return $new_email;
     }

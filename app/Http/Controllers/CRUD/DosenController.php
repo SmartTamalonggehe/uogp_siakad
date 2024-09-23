@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Dosen;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CrudResource;
@@ -31,12 +32,19 @@ class DosenController extends Controller
         $rules = [
             'nm_dosen' => 'required',
             'jenkel' => 'required',
+            'email' => [
+                Rule::unique('users')->where(function ($query) use ($request, $id) {
+                    return $query->where('email', $request['email']);
+                }),
+            ],
         ];
 
         $messages = [
             'nm_dosen.required' => 'Nama dosen harus diisi.',
             'jenkel.required' => 'Jenkel harus diisi.',
+            'email.unique' => 'Email sudah terdaftar. Silahkan Mengubah Nama.',
         ];
+
         $validator = Validator::make($request, $rules, $messages);
 
         if ($validator->fails()) {
@@ -84,11 +92,7 @@ class DosenController extends Controller
     public function store(Request $request)
     {
         $data_req = $request->all();
-        // return $data_req;
-        $validate = $this->spartaValidation($data_req);
-        if ($validate) {
-            return $validate;
-        }
+
         DB::beginTransaction();
 
         try {
@@ -96,9 +100,14 @@ class DosenController extends Controller
             $password = $this->makeAccount->password();
             // membuat email
             $email = $this->makeAccount->email($data_req['nm_dosen']);
-            // make id user uuid
-            $data_req['id'] = Str::uuid();
-            $data_req["user_id"] = $data_req['id'];
+            // add email to data_req
+            $data_req['email'] = $email;
+            // cek validasi
+            $validate = $this->spartaValidation($data_req);
+            if ($validate) {
+                return $validate;
+            }
+
             // input data user
             $user = User::create([
                 'id' => $data_req['id'],
@@ -109,6 +118,9 @@ class DosenController extends Controller
                 'role' => 'dosen',
             ]);
 
+            $data_req["user_id"] = $user->id;
+            // remove email from data_req
+            unset($data_req['email']);
             Dosen::create($data_req);
             $data = Dosen::with(['user'])
                 ->latest()->first();
@@ -159,7 +171,7 @@ class DosenController extends Controller
     {
         $data_req = $request->all();
         // return $data_req;
-        $validate = $this->spartaValidation($data_req);
+        $validate = $this->spartaValidation($data_req, $id);
         if ($validate) {
             return $validate;
         }

@@ -13,8 +13,15 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['myThrottle', 'auth:api', 'role:admin,fakultas'])->group(function () {
+Route::middleware(['myThorottle', 'auth:api', 'role:admin,fakultas'])->group(function () {
     Route::resource('prodi', App\Http\Controllers\CRUD\ProdiController::class);
+});
+Route::middleware(['myThorottle', 'auth:api', 'role:admin,prodi'])->group(function () {
+    Route::resources([
+        'mhs' => App\Http\Controllers\CRUD\MhsController::class,
+        'kontrak' => App\Http\Controllers\CRUD\KontrakController::class,
+        'kontrakdet' => App\Http\Controllers\CRUD\KontrakDetController::class,
+    ]);
 });
 
 Route::middleware(['myThorottle', 'auth:api', "role:admin,fakultas,prodi"])->group(function () {

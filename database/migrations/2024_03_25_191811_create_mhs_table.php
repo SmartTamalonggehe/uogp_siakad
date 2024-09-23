@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('mhs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignId('prodi_id')->constrained('prodi')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('NPM', 4); // 120004
             $table->string('nm_mhs', 150);
             $table->string('jenkel', 10);

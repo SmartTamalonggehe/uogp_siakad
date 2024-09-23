@@ -21,4 +21,10 @@ class Mhs extends Model
     {
         return $this->hasMany(KontrakDet::class, 'mhs_id');
     }
+
+    // belongsTo user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

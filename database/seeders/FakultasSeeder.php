@@ -15,8 +15,8 @@ class FakultasSeeder extends Seeder
     {
         Fakultas::create([
             'id' => 1,
-            'nm_fakultas' => 'Fakultas Ekonomi dan Bisnis',
-            'singkat' => 'FE',
+            'nm_fakultas' => 'Fakultas Ekonomi & Bisnis',
+            'singkat' => 'FEB',
         ]);
 
         Fakultas::create([

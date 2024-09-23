@@ -3,15 +3,26 @@
 namespace App\Http\Controllers\CRUD;
 
 use App\Models\Mhs;
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CrudResource;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\CRUD\LoginMhsController;
+use App\Http\Controllers\TOOLS\MakeAccountController;
 
 class MhsController extends Controller
 {
+    protected $makeAccount;
+
+    // make construct
+    public function __construct()
+    {
+        $this->makeAccount = new MakeAccountController();
+    }
 
     protected function spartaValidation($request, $id = "")
     {
@@ -50,7 +61,7 @@ class MhsController extends Controller
         $sortby = $request->sortby;
         $order = $request->order;
         $prodi_id = $request->prodi_id;
-        $data = Mhs::with(['loginMhs', 'prodi'])
+        $data = Mhs::with(['user', 'prodi'])
             ->where(function ($query) use ($search) {
                 $query->where('nm_mhs', 'like', "%$search%")
                     ->orWhereHas('prodi', function ($prodi) use ($search) {
@@ -94,8 +105,21 @@ class MhsController extends Controller
         DB::beginTransaction();
 
         try {
+            // membuat password
+            $password = $this->makeAccount->password();
+            // membuat email
+            $email = $this->makeAccount->email($data_req['nm_mhs']);
+            // input data user
+            $user = User::create([
+                'name' => $data_req['nm_mhs'],
+                'email' => $email,
+                'password' => Hash::make($password),
+                'show_password' => $password,
+                'role' => 'dosen',
+            ]);
+            $data_req["user_id"] = $user->id;
             Mhs::create($data_req);
-            $data = Mhs::with(['prodi'])->latest()->first();
+            $data = Mhs::with(['user', 'prodi'])->latest()->first();
             DB::commit();
             return new CrudResource('success', 'Data Berhasil Disimpan', $data);
         } catch (\Throwable $th) {
@@ -147,7 +171,7 @@ class MhsController extends Controller
 
         Mhs::find($id)->update($data_req);
 
-        $data = Mhs::with(['prodi'])->find($id);
+        $data = Mhs::with(['prodi', 'user'])->find($id);
 
         return new CrudResource('success', 'Data Berhasil Diubah', $data);
     }
