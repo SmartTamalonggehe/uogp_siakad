@@ -59,6 +59,7 @@ class JadwalController extends Controller
         $search = $request->search;
         $prodi_id = $request->prodi_id;
         $fakultas_id = $request->fakultas_id;
+        $reguler = $request->reguler;
         $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi'])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
@@ -74,6 +75,9 @@ class JadwalController extends Controller
             })
             ->when($prodi_id, function ($query) use ($prodi_id) {
                 $query->where('prodi_id', $prodi_id);
+            })
+            ->when($reguler, function ($query) use ($reguler) {
+                $query->where('reguler', $reguler);
             })
             ->where([
                 ['semester', $semester],
