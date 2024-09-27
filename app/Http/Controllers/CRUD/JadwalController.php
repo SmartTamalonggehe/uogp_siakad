@@ -60,7 +60,7 @@ class JadwalController extends Controller
         $prodi_id = $request->prodi_id;
         $fakultas_id = $request->fakultas_id;
         $reguler = $request->reguler;
-        $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi'])
+        $data = Jadwal::with(['dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi'])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
                     ->orWhereHas('matkul', function ($mhs) use ($search) {

@@ -29,6 +29,11 @@ class Jadwal extends Model
     {
         return $this->belongsTo(Dosen::class);
     }
+    // belongsto dosen
+    public function dosen_1()
+    {
+        return $this->belongsTo(Dosen::class, 'dosen_id_1');
+    }
 
     // belongsTo prodi
     public function prodi()
