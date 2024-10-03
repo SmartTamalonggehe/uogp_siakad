@@ -4,7 +4,6 @@ namespace App\Http\Controllers\CRUD;
 
 use App\Models\User;
 use App\Models\Dosen;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;

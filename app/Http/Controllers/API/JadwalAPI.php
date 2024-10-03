@@ -16,7 +16,7 @@ class JadwalAPI extends Controller
         $tahun = $request->tahun;
         $search = $request->search;
         $prodi_id = $request->prodi_id;
-        $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi.fakultas'])
+        $data = Jadwal::with(['dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi.fakultas'])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
                     ->orWhereHas('matkul', function ($matkul) use ($search) {
@@ -72,7 +72,7 @@ class JadwalAPI extends Controller
         $fakultas_id = $request->fakultas_id;
         $dosen_id = $request->dosen_id;
 
-        $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi.fakultas'])
+        $data = Jadwal::with(['dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi.fakultas'])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
                     ->orWhereHas('matkul', function ($mhs) use ($search) {
@@ -94,9 +94,8 @@ class JadwalAPI extends Controller
                 });
             })
             ->when($dosen_id, function ($query) use ($dosen_id) {
-                return $query->whereHas('dosen', function ($query) use ($dosen_id) {
-                    $query->where('dosen_id', 'like', $dosen_id);
-                });
+                $query->where('dosen_id', $dosen_id)
+                    ->orWhere('dosen_id_1', $dosen_id);
             })
             ->where([
                 ['semester',  $semester],
@@ -114,7 +113,7 @@ class JadwalAPI extends Controller
         $array = array_map('intval', explode(',', $jadwal_id));
         $search = $request->search;
 
-        $data = Jadwal::with('dosen', 'matkul', 'ruangan', 'prodi')
+        $data = Jadwal::with('dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi')
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
                     ->orWhereHas('matkul', function ($mhs) use ($search) {
@@ -140,7 +139,7 @@ class JadwalAPI extends Controller
         $fakultas_id = $request->fakultas_id;
         $dosen_id = $request->dosen_id;
 
-        $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi.fakultas'])
+        $data = Jadwal::with(['dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi.fakultas'])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
                     ->orWhereHas('matkul', function ($matkul) use ($search) {
@@ -160,7 +159,8 @@ class JadwalAPI extends Controller
                 $query->where('prodi_id', $prodi_id);
             })
             ->when($dosen_id, function ($query) use ($dosen_id) {
-                $query->where('dosen_id', $dosen_id);
+                $query->where('dosen_id', $dosen_id)
+                    ->orWhere('dosen_id_1', $dosen_id);
             })
             ->where([
                 ['semester',  $semester],
@@ -174,7 +174,7 @@ class JadwalAPI extends Controller
 
     public function show($id)
     {
-        $data = Jadwal::with('dosen', 'matkul', 'ruangan', 'prodi')->findOrFail($id);
+        $data = Jadwal::with('dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi')->findOrFail($id);
         return new CrudResource('success', 'Data Jadwal', $data);
     }
 }
