@@ -110,7 +110,7 @@ class JadwalController extends Controller
         }
         Jadwal::create($data_req);
 
-        $data = Jadwal::with(['dosen', 'matkul', 'ruangan', 'prodi'])->latest()->first();
+        $data = Jadwal::with(['dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi'])->latest()->first();
 
         return new CrudResource('success', 'Data Berhasil Disimpan', $data);
     }
