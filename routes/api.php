@@ -57,3 +57,7 @@ Route::middleware(['myThorottle'])->group(function () {
         Route::get('{id}', [App\Http\Controllers\API\JadwalAPI::class, 'show']);
     });
 });
+
+Route::middleware(['myThorottle', 'auth:api'])->group(function () {
+    
+});

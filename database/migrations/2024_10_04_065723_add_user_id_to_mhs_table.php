@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('mhs', function (Blueprint $table) {
-            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('user_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate()->affter('id');
         });
     }
 
@@ -22,6 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('mhs', function (Blueprint $table) {
+            // Hapus foreign key constraint terlebih dahulu
+            $table->dropForeign(['user_id']);
             $table->dropColumn(['user_id']);
         });
     }
