@@ -112,19 +112,6 @@ class MhsController extends Controller
             }
             // membuat password
             $password = $this->makeAccount->password();
-            $email = $request->email;
-            // cek input email ada
-            if ($email) {
-                // input data user
-                $user = User::create([
-                    'name' => $data_req['nm_mhs'],
-                    'email' => $email,
-                    'password' => Hash::make($password),
-                    'show_password' => $password,
-                    'role' => 'mhs',
-                ]);
-                $data_req["user_id"] = $user->id;
-            }
             // input data user
             $user = User::create([
                 'name' => $data_req['nm_mhs'],
