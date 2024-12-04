@@ -112,7 +112,6 @@ class MhsController extends Controller
             }
             // membuat password
             $password = $this->makeAccount->password();
-<<<<<<< HEAD
             $email = $request->email;
             // cek input email ada
             if ($email) {
@@ -126,7 +125,6 @@ class MhsController extends Controller
                 ]);
                 $data_req["user_id"] = $user->id;
             }
-=======
             // input data user
             $user = User::create([
                 'name' => $data_req['nm_mhs'],
@@ -136,7 +134,6 @@ class MhsController extends Controller
                 'role' => 'mhs',
             ]);
             $data_req["user_id"] = $user->id;
->>>>>>> 6d32fd0 (memperbaiki input mhs)
             Mhs::create($data_req);
             $data = Mhs::with(['user', 'prodi'])->latest()->first();
             DB::commit();
