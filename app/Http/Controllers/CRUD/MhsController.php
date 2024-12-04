@@ -4,14 +4,12 @@ namespace App\Http\Controllers\CRUD;
 
 use App\Models\Mhs;
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CrudResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\CRUD\LoginMhsController;
 use App\Http\Controllers\TOOLS\MakeAccountController;
 
 class MhsController extends Controller
@@ -105,8 +103,16 @@ class MhsController extends Controller
         DB::beginTransaction();
 
         try {
+            // check nm_mhs if exist add number add random number
+            $check = Mhs::where('nm_mhs', $data_req['nm_mhs'])->first();
+            $email = $this->makeAccount->email($data_req['nm_mhs']);
+            if ($check) {
+                $nm_mhs = $data_req['nm_mhs'] . " " . rand(1, 100);
+                $email = $this->makeAccount->email($nm_mhs);
+            }
             // membuat password
             $password = $this->makeAccount->password();
+<<<<<<< HEAD
             $email = $request->email;
             // cek input email ada
             if ($email) {
@@ -120,6 +126,17 @@ class MhsController extends Controller
                 ]);
                 $data_req["user_id"] = $user->id;
             }
+=======
+            // input data user
+            $user = User::create([
+                'name' => $data_req['nm_mhs'],
+                'email' => $email,
+                'password' => Hash::make($password),
+                'show_password' => $password,
+                'role' => 'mhs',
+            ]);
+            $data_req["user_id"] = $user->id;
+>>>>>>> 6d32fd0 (memperbaiki input mhs)
             Mhs::create($data_req);
             $data = Mhs::with(['user', 'prodi'])->latest()->first();
             DB::commit();
