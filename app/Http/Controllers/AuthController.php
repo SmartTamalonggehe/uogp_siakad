@@ -66,7 +66,7 @@ class AuthController extends Controller
             ], 401);
         }
         // mengambil email
-        $user = User::where('email', $request['email'])->with('dosen')->firstOrFail();
+        $user = User::with(['dosen', 'mhs'])->where('email', $request['email'])->with('dosen')->firstOrFail();
         // membuat token
         $token = $user->createToken('authToken')->accessToken;
 
@@ -77,9 +77,9 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
-                'email' => $user->email,
                 'role' => $user->role,
-                'dosen' => $user->dosen
+                'dosen' => $user->dosen,
+                'mhs' => $user->mhs
             ]
         ]);
     }

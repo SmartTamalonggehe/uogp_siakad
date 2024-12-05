@@ -56,8 +56,11 @@ Route::middleware(['myThorottle'])->group(function () {
         Route::get('byTahunSemester', [App\Http\Controllers\API\JadwalAPI::class, 'byTahunSemester']);
         Route::get('{id}', [App\Http\Controllers\API\JadwalAPI::class, 'show']);
     });
+    // kontrak
+    Route::prefix('kontrak')->group(function () {
+        Route::get('/', [App\Http\Controllers\API\KontrakAPI::class, 'index']);
+        Route::get('all', [App\Http\Controllers\API\KontrakAPI::class, 'all']);
+    });
 });
 
-Route::middleware(['myThorottle', 'auth:api'])->group(function () {
-    
-});
+Route::middleware(['myThorottle', 'auth:api'])->group(function () {});

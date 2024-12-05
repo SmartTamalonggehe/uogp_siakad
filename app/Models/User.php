@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Dosen::class);
     }
+    // hasOne mhs
+    public function mhs()
+    {
+        return $this->hasOne(Mhs::class);
+    }
 }
