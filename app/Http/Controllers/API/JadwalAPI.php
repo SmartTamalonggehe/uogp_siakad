@@ -17,6 +17,11 @@ class JadwalAPI extends Controller
         $search = $request->search;
         $prodi_id = $request->prodi_id;
         $data = Jadwal::with(['dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi.fakultas'])
+            ->where([
+                ['semester', 'like', "%$semester%"],
+                ['tahun', 'like', "%$tahun%"],
+                ['prodi_id', 'like', "%$prodi_id%"],
+            ])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
                     ->orWhereHas('matkul', function ($matkul) use ($search) {
@@ -27,11 +32,7 @@ class JadwalAPI extends Controller
                         $dosen->where('nm_dosen', 'like', "%$search%");
                     });
             })
-            ->where([
-                ['semester', 'like', "%$semester%"],
-                ['tahun', 'like', "%$tahun%"],
-                ['prodi_id', 'like', "%$prodi_id%"],
-            ])
+
             ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")
             ->orderBy('mulai')
             ->paginate(10);
@@ -73,6 +74,10 @@ class JadwalAPI extends Controller
         $dosen_id = $request->dosen_id;
 
         $data = Jadwal::with(['dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi.fakultas'])
+            ->where([
+                ['semester',  $semester],
+                ['tahun',  $tahun],
+            ])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
                     ->orWhereHas('matkul', function ($mhs) use ($search) {
@@ -97,10 +102,6 @@ class JadwalAPI extends Controller
                 $query->where('dosen_id', $dosen_id)
                     ->orWhere('dosen_id_1', $dosen_id);
             })
-            ->where([
-                ['semester',  $semester],
-                ['tahun',  $tahun],
-            ])
             ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")
             ->orderBy('mulai')
             ->get();
@@ -140,6 +141,10 @@ class JadwalAPI extends Controller
         $dosen_id = $request->dosen_id;
 
         $data = Jadwal::with(['dosen', 'dosen_1', 'matkul', 'ruangan', 'prodi.fakultas'])
+            ->where([
+                ['semester',  $semester],
+                ['tahun',  $tahun],
+            ])
             ->where(function ($query) use ($search) {
                 $query->where('hari', 'like', "%$search%")
                     ->orWhereHas('matkul', function ($matkul) use ($search) {
@@ -162,10 +167,6 @@ class JadwalAPI extends Controller
                 $query->where('dosen_id', $dosen_id)
                     ->orWhere('dosen_id_1', $dosen_id);
             })
-            ->where([
-                ['semester',  $semester],
-                ['tahun',  $tahun],
-            ])
             ->orderByRaw("FIELD(hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu')")
             ->orderBy('mulai')
             ->get();
