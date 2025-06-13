@@ -9,14 +9,21 @@ use App\Http\Resources\CrudResource;
 
 class DosenAPI extends Controller
 {
+
     function index(Request $request)
     {
         $search = $request->search;
         $limit = $request->limit;
-        $data = Dosen::where('nm_dosen', 'like', "%$search%")
+        $jabatan = $request->jabatan ?? 'dosen';
+        $struktural = $request->struktural ?? false;
+        $data = Dosen::with('struktural.prodi.fakultas')->where('nm_dosen', 'like', "%$search%")
+            ->where('jabatan', $jabatan)
+            ->when($struktural, function ($query) {
+                return $query->whereHas('struktural');
+            })
             ->orderBy('nm_dosen', 'asc')
             ->paginate($limit);
-        return new CrudResource('success', 'Data Dosen', $data);
+        return new CrudResource('success', 'Data dosen', $data);
     }
 
     function show($id)
@@ -28,9 +35,18 @@ class DosenAPI extends Controller
     function all(Request $request)
     {
         $search = $request->search;
-        $data = Dosen::where('nm_dosen', 'like', "%$search%")
+        $jabatan = $request->jabatan ?? 'dosen';
+        $semua = $request->semua ?? false;
+        $struktural = $request->struktural ?? false;
+        $data = Dosen::with('struktural.prodi.fakultas')->where('nm_dosen', 'like', "%$search%")
+            ->when(!$semua, function ($query) use ($jabatan) {
+                return $query->where('jabatan', $jabatan);
+            })
+            ->when($struktural, function ($query) {
+                return $query->whereHas('struktural');
+            })
             ->orderBy('nm_dosen', 'asc')
             ->get();
-        return new CrudResource('success', 'Data Dosen', $data);
+        return new CrudResource('success', 'Data dosen', $data);
     }
 }

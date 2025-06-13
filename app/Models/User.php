@@ -47,7 +47,6 @@ class User extends Authenticatable
     ];
 
     // hasOne dosen
-
     public function dosen()
     {
         return $this->hasOne(Dosen::class);

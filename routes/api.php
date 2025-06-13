@@ -46,10 +46,14 @@ Route::middleware(['myThorottle'])->group(function () {
         Route::get('/', [App\Http\Controllers\API\MhsAPI::class, 'index']);
         Route::get('kontrak', [App\Http\Controllers\API\MhsAPI::class, 'kontrak']);
         Route::get('all', [App\Http\Controllers\API\MhsAPI::class, 'all']);
+        Route::get('active', [App\Http\Controllers\API\MhsAPI::class, 'active']);              // GET /api/mhs/active - Active only (legacy)
+        Route::get('filter-options', [App\Http\Controllers\API\MhsAPI::class, 'filterOptions']); // GET /api/mhs/filter-options - Get filter options
+        Route::get('statistics', [App\Http\Controllers\API\MhsAPI::class, 'statistics']);
     });
     // jadwal
     Route::prefix('jadwal')->group(function () {
         Route::get('/', [App\Http\Controllers\API\JadwalAPI::class, 'index']);
+        Route::get('filter-options', [App\Http\Controllers\API\JadwalAPI::class, 'filterOptions']);
         Route::get('byDosen', [App\Http\Controllers\API\JadwalAPI::class, 'byDosen']);
         Route::get('byDosenFull', [App\Http\Controllers\API\JadwalAPI::class, 'byDosenFull']);
         Route::get('byJadwal', [App\Http\Controllers\API\JadwalAPI::class, 'byJadwal']);

@@ -39,6 +39,7 @@ class KontrakAPI extends Controller
         $semester = $request->semester;
         $tahun = $request->tahun;
         $mhs_id = $request->mhs_id;
+        $prodi_id = $request->prodi_id;
         $data = KontrakDet::with(['kontrak', 'mhs.prodi', 'jadwal.matkul'])
             ->whereHas('kontrak', function ($query) use ($semester, $tahun) {
                 $query->when($semester, function ($query) use ($semester) {
@@ -48,9 +49,14 @@ class KontrakAPI extends Controller
                     $query->where('tahun', $tahun);
                 });
             })
-            ->whereHas('mhs', function ($query) use ($mhs_id) {
-                $query->when($mhs_id, function ($query) use ($mhs_id) {
+            ->when($mhs_id, function ($query) use ($mhs_id) {
+                $query->whereHas('mhs', function ($query) use ($mhs_id) {
                     $query->where('mhs_id', $mhs_id);
+                });
+            })
+            ->when($prodi_id, function ($query) use ($prodi_id) {
+                $query->whereHas('mhs', function ($query) use ($prodi_id) {
+                    $query->where('prodi_id', $prodi_id);
                 });
             })
             ->get();
