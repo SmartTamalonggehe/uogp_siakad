@@ -47,7 +47,7 @@ class Jadwal extends Model
      */
     public function dosen_1(): BelongsTo
     {
-        return $this->belongsTo(Dosen::class, 'dosen_1_id', 'id');
+        return $this->belongsTo(Dosen::class, 'dosen_id_1', 'id');
     }
 
     /**
