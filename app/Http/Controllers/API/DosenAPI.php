@@ -35,13 +35,9 @@ class DosenAPI extends Controller
     function all(Request $request)
     {
         $search = $request->search;
-        $jabatan = $request->jabatan ?? 'dosen';
         $semua = $request->semua ?? false;
         $struktural = $request->struktural ?? false;
         $data = Dosen::with('struktural.prodi.fakultas')->where('nm_dosen', 'like', "%$search%")
-            ->when(!$semua, function ($query) use ($jabatan) {
-                return $query->where('jabatan', $jabatan);
-            })
             ->when($struktural, function ($query) {
                 return $query->whereHas('struktural');
             })

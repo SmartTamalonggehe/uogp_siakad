@@ -139,9 +139,9 @@ class JadwalAPI extends Controller
             $jadwal = Jadwal::with([
                 'dosen:id,nm_dosen',
                 'dosen_1:id,nm_dosen',
-                'matkul:id,nm_matkul,kd_matkul,singkat,sks',
-                'ruangan:id,nm_ruangan',
-                'prodi:id,nm_prodi',
+                'matkul:id,nm_matkul,kd_matkul,singkat,sks,semester',
+                'ruangan:id,nm_ruangan,singkat',
+                'prodi:id,nm_prodi,singkat',
                 'prodi.fakultas:id,nm_fakultas'
             ])->findOrFail($id);
 
